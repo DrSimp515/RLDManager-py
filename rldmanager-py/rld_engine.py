@@ -494,6 +494,12 @@ def apply_translations(rld: "RLD", original_strings: list[str],
             merged[idx] = text
     return merged
 
+try:
+    import keyfinder_fast as _kf
+    _KF_AVAILABLE = True
+except ImportError:
+    _KF_AVAILABLE = False
+
 class KeyFinder:
     def __init__(self, script: bytes):
         self.script   = script
@@ -562,6 +568,13 @@ class KeyFinder:
         return None
 
     def _run(self):
+        if _KF_AVAILABLE:
+            result = _kf.scan(self.script, self._stop, self.on_progress)
+            self.found = [result] if result is not None else []
+            if self.on_done:
+                self.on_done(self.found)
+            return
+
         TOTAL = 0xFFFFFFFF
         WORKER_CHUNK = 4096
         found: list[int] = []
