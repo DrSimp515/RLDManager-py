@@ -10,7 +10,7 @@ Supports text extraction, reinsertion, XOR cipher, brute-force key search, and G
 - Open multiple `.rld` files as tabs
 - Extract and reinsert translated strings
 - XOR cipher with key selection from a built-in list or `RLDKeys.txt`
-- Brute-force key finder
+- Brute-force key finder with automatic backend selection (CUDA / Numba / Python)
 - Export strings to `.txt` (tagged or plain)
 - Import translations from file
 - GYU image viewer/decoder
@@ -29,6 +29,19 @@ Install dependencies:
 ```
 pip install -r requirements.txt
 ```
+
+### Optional — faster key search
+
+The brute-force key finder automatically picks the fastest backend available:
+
+| Backend | Speedup | Install |
+|---------|---------|---------|
+| CUDA (Nvidia GPU) | ~500–2000x | `pip install cupy-cuda12x` ¹ |
+| Numba (CPU JIT) | ~20–100x | `pip install numba numpy` |
+| Python (default) | baseline | nothing |
+
+¹ Replace `12x` with your CUDA version (`11x`, `12x`, etc.).  
+Without either package the app falls back to the built-in Python scanner automatically.
 
 ## Run
 
